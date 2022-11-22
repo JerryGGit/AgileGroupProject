@@ -1,3 +1,12 @@
+def race_venues():
+    with open("Races.txt") as input:
+        lines = input.readlines()
+    races_location = []
+    for line in lines:
+        races_location.append(line.strip("\n"))
+    return races_location
+
+
 def main():
     races_location = race_venues()
     runners_name, runners_id = runners_data()
