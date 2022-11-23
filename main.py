@@ -24,6 +24,21 @@ def runners_data():
     return runners_name, runners_id
 
 
+def competitors_by_county(name, id):
+    print("=" * 20)
+    print("Cork runners")
+    print("=" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("CK"):
+            print(f"{name[i]} ({id[i]})")
+    print("=" * 20)
+    print("Kerry runners")
+    print("=" * 20)
+    for i in range(len(name)):
+        if id[i].startswith("KY"):
+            print(f"{name[i]} ({id[i]})")
+
+
 def main():
     runners_name, runners_id = runners_data()
     menu = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
@@ -37,7 +52,7 @@ def main():
         elif input_menu == 2:
             print("Add results for a race ")
         elif input_menu == 3:
-            print("Show all competitors by county ")
+            competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
             print("Show the podium-places for each race ")
         elif input_menu == 5:
