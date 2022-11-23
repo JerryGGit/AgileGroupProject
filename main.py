@@ -10,7 +10,22 @@ def read_integer_between_numbers(prompt, mini, maximum):
             print("Sorry - numbers only please")
 
 
+def runners_data():
+    with open("runners.txt") as input:
+        lines = input.readlines()
+    runners_name = []
+    runners_id = []
+    for line in lines:
+        if not line.isspace():
+            split_line = line.split(",")
+            runners_name.append(split_line[0])
+            id = split_line[1].strip("\n")
+            runners_id.append(id)
+    return runners_name, runners_id
+
+
 def main():
+    runners_name, runners_id = runners_data()
     menu = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
            "\n6. Show all competitors who have won a race \n7. Show all competitors who have not taken a " \
