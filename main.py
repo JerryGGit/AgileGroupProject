@@ -7,14 +7,16 @@ def read_integer_between_numbers(prompt, mini, maximum):
             else:
                 print(f"Numbers from {mini} to {maximum} only.")
         except ValueError:
-            print("Sorry - numbers only please")
+            print("Sorry - Numbers only please")
 
 
 def read_nonempty_string(prompt):
     while True:
-        users_input = input(prompt)
+        users_input = str(input(prompt))
         if len(users_input) > 0 and users_input.isalpha():
             break
+        else:
+            print("Sorry - Letters only and no blanks allowed")
     return users_input
 
 
@@ -66,6 +68,29 @@ def competitors_by_county(name, id):
             print(f"{name[i]} ({id[i]})")
 
 
+def users_venue(races_location, runners_name, runners_id):
+    while True:
+        user_location = read_nonempty_string("Where will the new race take place? ").capitalize()
+        if user_location not in races_location:
+            race_target = read_integer("What is the race target time? ")
+            connection = open("Races.txt", "a")
+            races_location.append(user_location)
+            print(f"{user_location}, {race_target}", file=connection)
+            connection.close()
+            break
+    connection = open(f"{user_location}.txt", "a")
+    races_location.append(user_location)
+    time_taken = []
+    updated_runners = []
+    for i in range(len(runners_name)):
+        time_taken_for_runner = read_integer(f"Time for {runners_name[i]} >> ")
+        if time_taken_for_runner != 0:
+            time_taken.append(time_taken_for_runner)
+            updated_runners.append(runners_id[i])
+            print(f"{runners_id[i]},{time_taken_for_runner},", file=connection)
+    connection.close()
+
+
 def main():
     races_location = race_venues()
     runners_name, runners_id = runners_data()
@@ -78,7 +103,7 @@ def main():
         if input_menu == 1:
             print("Show the results for a race ")
         elif input_menu == 2:
-            print("Add results for a race ")
+            users_venue(races_location, runners_name, runners_id )
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
