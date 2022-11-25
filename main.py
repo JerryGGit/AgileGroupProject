@@ -10,6 +10,33 @@ def read_integer_between_numbers(prompt, mini, maximum):
             print("Sorry - numbers only please")
 
 
+def read_nonempty_string(prompt):
+    while True:
+        users_input = input(prompt)
+        if len(users_input) > 0 and users_input.isalpha():
+            break
+    return users_input
+
+
+def read_integer(prompt):
+    while True:
+        try:
+            users_input = int(input(prompt))
+            if users_input >= 0:
+                return users_input
+        except ValueError:
+            print("Sorry -number only please")
+
+
+def race_venues():
+    with open("races.txt") as input:
+        lines = input.readlines()
+    races_location = []
+    for line in lines:
+        races_location.append(line.strip("\n"))
+    return races_location
+
+
 def runners_data():
     with open("runners.txt") as input:
         lines = input.readlines()
@@ -40,6 +67,7 @@ def competitors_by_county(name, id):
 
 
 def main():
+    races_location = race_venues()
     runners_name, runners_id = runners_data()
     menu = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
