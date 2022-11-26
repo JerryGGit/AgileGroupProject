@@ -60,7 +60,7 @@ def runners_data():
     return runners_name, runners_id
 
 
-# Function shows list of races to choose from, then lists the results of that race
+# Function shows list of races to choose from, then lists the results of chosen race
 def show_race_result(races):
     prompt = ""
     print("\nWhich race would you like to see the results of?")     # Menu Prompt
@@ -69,7 +69,7 @@ def show_race_result(races):
         prompt += f"{i+1}. {race}\n"
     prompt += ">>>"
     race_input = read_integer_between_numbers(prompt, 1, len(races))        # Actually print the menu using read_integer_between_numbers function
-    chosen_race = races[race_input - 1].split(",")[0]       # Tie the result of the menu to the name of an actual race
+    chosen_race = races[race_input - 1].split(",")[0]       # Tie the input of the menu to the name of an actual race
     with open(f"{chosen_race}.txt") as file:        # Open the file for the race using the chosen_name variable as a name for the text file
         lines = file.readlines()
     print(f"\n-- Results for {chosen_race} --")
@@ -77,7 +77,7 @@ def show_race_result(races):
         if line.isspace():
             continue
         else:
-            line = line.strip("\n")
+            line = line.strip("\n")         # This line and next 2 lines just format the individual objects to have a nice formatted output
             runner = line.split(",")[0]
             formatted_time = format_secs_to_minSecs(line.split(",")[1])
             print(f"{runner}, {formatted_time}")
