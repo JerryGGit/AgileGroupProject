@@ -9,7 +9,6 @@ def read_integer_between_numbers(prompt, mini, maximum):
         except ValueError:
             print("Sorry - Numbers only please")
 
-
 def read_nonempty_string(prompt):
     while True:
         users_input = str(input(prompt))
@@ -28,6 +27,14 @@ def read_integer(prompt):
                 return users_input
         except ValueError:
             print("Sorry -number only please")
+
+
+def format_secs_to_minSecs(secs):
+    secs = int(secs)
+    minutes = secs // 60
+    secs_remaining = secs % 60
+    formatted_time = f"{minutes} m, {secs_remaining} s"
+    return formatted_time
 
 
 def race_venues():
@@ -52,6 +59,29 @@ def runners_data():
             runners_id.append(id)
     return runners_name, runners_id
 
+
+# Function shows list of races to choose from, then lists the results of that race
+def show_race_result(races):
+    prompt = ""
+    print("\nWhich race would you like to see the results of?")     # Menu Prompt
+    for i, race in enumerate(races):        # Iterate through races to create menu options
+        race = race.split(',')[0]
+        prompt += f"{i+1}. {race}\n"
+    prompt += ">>>"
+    race_input = read_integer_between_numbers(prompt, 1, len(races))        # Actually print the menu using read_integer_between_numbers function
+    chosen_race = races[race_input - 1].split(",")[0]       # Tie the result of the menu to the name of an actual race
+    with open(f"{chosen_race}.txt") as file:        # Open the file for the race using the chosen_name variable as a name for the text file
+        lines = file.readlines()
+    print(f"\n-- Results for {chosen_race} --")
+    for line in lines:          # for loop to check if the line is empty space or not, then print the ones that aren't
+        if line.isspace():
+            continue
+        else:
+            line = line.strip("\n")
+            runner = line.split(",")[0]
+            formatted_time = format_secs_to_minSecs(line.split(",")[1])
+            print(f"{runner}, {formatted_time}")
+        
 
 def competitors_by_county(name, id):
     print("=" * 20)
@@ -94,14 +124,14 @@ def users_venue(races_location, runners_name, runners_id):
 def main():
     races_location = race_venues()
     runners_name, runners_id = runners_data()
-    menu = "1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
+    menu = "\n1. Show the results for a race \n2. Add results for a race \n3. Show all competitors by county " \
            "\n4. Show the winner of each race \n5. Show all the race times for one competitor " \
            "\n6. Show all competitors who have won a race \n7. Show all competitors who have not taken a " \
            "podium-position in any race \n8. Quit \n>>> "
     input_menu = read_integer_between_numbers(menu, 1, 8)
     while input_menu != 8:
         if input_menu == 1:
-            print("Show the results for a race ")
+            show_race_result(races_location)
         elif input_menu == 2:
             users_venue(races_location, runners_name, runners_id )
         elif input_menu == 3:
