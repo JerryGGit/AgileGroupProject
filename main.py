@@ -180,7 +180,6 @@ def main():
             print("Show all the race times and finishing-positions for one competitor ")
         elif input_menu == 6:
             show_all_winners(races_location, runners_name, runners_id)
-            #This is a test for seeing if push works for fionn
             print("Show all the race times and finishing-positions for one competitor ")
         elif input_menu == 7:
             print("Show all competitors who have not taken a podium-position in any race ")
