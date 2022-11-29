@@ -64,7 +64,7 @@ def runners_data():
         if not line.isspace():
             split_line = line.split(",")
             runners_name.append(split_line[0])
-            id = split_line[1].strip("\n")
+            id = split_line[1].strip()
             runners_id.append(id)
     return runners_name, runners_id
 
@@ -105,18 +105,22 @@ def show_race_result(races):
 
 
 def competitors_by_county(name, id):
-    print("=" * 20)
-    print("Cork runners")
-    print("=" * 20)
-    for i in range(len(name)):
-        if id[i].startswith("CK"):
-            print(f"{name[i]} ({id[i]})")
-    print("=" * 20)
-    print("Kerry runners")
-    print("=" * 20)
-    for i in range(len(name)):
-        if id[i].startswith("KY"):
-            print(f"{name[i]} ({id[i]})")
+    with open("County_codes.txt") as input:
+        lines = input.readlines()
+    counties = {}
+    for line in lines:
+        if not line.isspace():
+            split_line = line.split(",")
+            cid = split_line[1].strip()
+            if split_line[0] not in counties:
+                counties[split_line[0]] = cid
+    for county in counties:
+        print("=" * 20)
+        print(county)
+        print("=" * 20)
+        for i in range(len(name)):
+            if id[i].startswith(counties[county]):
+                print(f"{name[i]} ({id[i]})")
 
 
 def users_venue(races_location, runners_name, runners_id):
