@@ -2,4 +2,6 @@ Currabinny, 30
 Adrigole, 32
 Conna, 29
 Dunmanway, 29.5
-Glengarriff, 32.5China
+Glengarriff, 32.5
+Spain, 356
+England, 23

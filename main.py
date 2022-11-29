@@ -9,6 +9,7 @@ def read_integer_between_numbers(prompt, mini, maximum):
         except ValueError:
             print("Sorry - Numbers only please")
 
+
 def read_nonempty_string(prompt):
     while True:
         users_input = str(input(prompt))
@@ -37,6 +38,14 @@ def format_secs_to_minSecs(secs):
     return formatted_time
 
 
+def strip_spaces_from_list(list):
+    updated_list = []
+    for item in list:
+        item = item.strip(" ")
+        updated_list.append(item)
+    return updated_list
+
+
 def race_venues():
     with open("races.txt") as input:
         lines = input.readlines()
@@ -62,43 +71,38 @@ def runners_data():
 
 def race_results_data(chosen_race):
     race_data_dict = {}
-    with open(f"{chosen_race}.txt") as file:        # Open the file for the race using the chosen_name variable as a name for the text file
+    with open(
+            f"{chosen_race}.txt") as file:  # Open the file for the race using the chosen_name variable as a name for the text file
         results = file.readlines()
-    for line in results:        # for loop to check if the line is empty space or not, then print the ones that aren't
+    for line in results:  # for loop to check if the line is empty space or not, then print the ones that aren't
         if line.isspace():
             continue
         else:
-            line = line.strip("\n")     # This line and next 2 lines just format the individual objects to have a nice formatted output
+            line = line.strip(
+                "\n")  # This line and next 2 lines just format the individual objects to have a nice formatted output
             runner = line.split(",")[0]
             time = line.split(",")[1]
             race_data_dict[runner] = time
     return race_data_dict
 
 
-def strip_spaces_from_list(list):
-    updated_list = []
-    for item in list:
-        item = item.strip(" ")
-        updated_list.append(item)
-    return updated_list
-
-
 # Function shows list of races to choose from, then lists the results of chosen race
 def show_race_result(races):
     prompt = ""
-    print("\nWhich race would you like to see the results of?")     # Menu Prompt
-    for i, race in enumerate(races):        # Iterate through races to create menu options
+    print("\nWhich race would you like to see the results of?")  # Menu Prompt
+    for i, race in enumerate(races):  # Iterate through races to create menu options
         race = race.split(',')[0]
-        prompt += f"{i+1}. {race}\n"
+        prompt += f"{i + 1}. {race}\n"
     prompt += ">>>"
-    race_input = read_integer_between_numbers(prompt, 1, len(races))        # Actually print the menu using read_integer_between_numbers function
-    chosen_race = races[race_input - 1].split(",")[0]       # Tie the input of the menu to the name of an actual race
+    race_input = read_integer_between_numbers(prompt, 1,
+                                              len(races))  # Actually print the menu using read_integer_between_numbers function
+    chosen_race = races[race_input - 1].split(",")[0]  # Tie the input of the menu to the name of an actual race
     print(f"\n-- The results for {chosen_race} --")
     results = race_results_data(chosen_race)
     for key in results:
         formatted_time = format_secs_to_minSecs(results[key])
         print(f"{key}, {formatted_time}")
-        
+
 
 def competitors_by_county(name, id):
     print("=" * 20)
@@ -126,7 +130,6 @@ def users_venue(races_location, runners_name, runners_id):
             connection.close()
             break
     connection = open(f"{user_location}.txt", "a")
-    races_location.append(user_location)
     time_taken = []
     updated_runners = []
     for i in range(len(runners_name)):
@@ -140,23 +143,26 @@ def users_venue(races_location, runners_name, runners_id):
 
 # This function displays all runners who have won a race
 def show_all_winners(races, runners_name, runners_id):
-    print("\n-- These are all the Runners who have won atleast 1 race! --")     # Title for the display
-    for race in races:      # iterating through all races
-        race = race.split(",")[0]       # using .split() method to get only the name of the race
-        results = race_results_data(race)       # getting the results for all races upon iteration
+    print("\n-- These are all the Runners who have won atleast 1 race! --")  # Title for the display
+    for race in races:  # iterating through all races
+        race = race.split(",")[0]  # using .split() method to get only the name of the race
+        results = race_results_data(race)  # getting the results for all races upon iteration
         times = []
-        for time in results.values():       # this for loop appends results of runners who actually ran the race (aka had more than 0 seconds)
+        for time in results.values():  # this for loop appends results of runners who actually ran the race (aka had more than 0 seconds)
             if int(time) != 0:
                 times.append(int(time))
-        times.sort()        # sorts the race from lowest number to highest to easily get fastest time
+        times.sort()  # sorts the race from lowest number to highest to easily get fastest time
         for result in results:
-            if times[0] == int(results[result]):        # if statement just declares the winners id based on the fastest time (using times[0])
+            if times[0] == int(results[
+                                   result]):  # if statement just declares the winners id based on the fastest time (using times[0])
                 winner_id = result
-        updated_ids = strip_spaces_from_list(runners_id)        # using strip_spaces_from_list function to get rid of spaces to properly parse through list
+        updated_ids = strip_spaces_from_list(
+            runners_id)  # using strip_spaces_from_list function to get rid of spaces to properly parse through list
         for name in runners_name:
-            if runners_name.index(name) == updated_ids.index(winner_id):        #getting index of winner_id in updated_ids list, then applying that index to runners.name list to get winners name
+            if runners_name.index(name) == updated_ids.index(
+                    winner_id):  # getting index of winner_id in updated_ids list, then applying that index to runners.name list to get winners name
                 winner_name = name
-        print(f"{winner_id}, {winner_name}")        # Actually displaying all winners using winner_id and winner_name
+        print(f"{winner_id}, {winner_name}")  # Actually displaying all winners using winner_id and winner_name
 
 
 def main():
@@ -171,7 +177,7 @@ def main():
         if input_menu == 1:
             show_race_result(races_location)
         elif input_menu == 2:
-            users_venue(races_location, runners_name, runners_id )
+            users_venue(races_location, runners_name, runners_id)
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
