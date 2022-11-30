@@ -185,13 +185,13 @@ def main():
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
-            print("This feature is not available at the moment.\n Please choose another option.")
+            print("show all podium placers for a race.")
         elif input_menu == 5:
             print("Show all the race times and finishing-positions for one competitor ")
         elif input_menu == 6:
             show_all_winners(races_location, runners_name, runners_id)
         elif input_menu == 7:
-            print("Show all competitors who have not taken a podium-position in any race ")
+            print("This feature is not available at the moment.\n Please choose another option.")
         input_menu = read_integer_between_numbers(menu, 1, 8)
 
 
