@@ -51,7 +51,9 @@ def race_venues():
         lines = input.readlines()
     races_location = []
     for line in lines:
-        races_location.append(line.strip("\n"))
+        #races_location.append(line.split(","))
+        separator = ','
+        races_location.append(line.split(separator, 1)[0])
     return races_location
 
 
@@ -122,6 +124,29 @@ def competitors_by_county(name, id):
             if id[i].startswith(counties[county]):
                 print(f"{name[i]} ({id[i]})")
 
+          #This function is for displaying_winners_of_each_race.
+
+def reading_race_results(races_location):
+    with open(f"{races_location}.txt") as input_type:
+        lines = input_type.readlines()
+    id = []
+    time_taken = []
+    print(lines)
+    for line in lines:
+        split_line = line.split(",".strip("\n"))
+        id.append(split_line[0])
+        time_taken.append(int(split_line[1].strip("\n")))
+    return id, time_taken
+
+        #This function is for option 4: podium placers.
+def displaying_winners_of_each_race(races_location):
+    print("Venue             Looser")
+    print("="*24)
+    for i in range(len(races_location)):
+        id, time_taken = reading_race_results(races_location[i])
+        fastest_runner = winner_of_race(id, time_taken)
+        print(f"{races_location[i]:<18s}{fastest_runner}")
+
 
 def users_venue(races_location, runners_name, runners_id):
     while True:
@@ -185,6 +210,7 @@ def main():
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
+            displaying_winners_of_each_race(races_location)
             print("show all podium placers for a race.")
         elif input_menu == 5:
             print("Show all the race times and finishing-positions for one competitor ")
@@ -194,6 +220,5 @@ def main():
         elif input_menu == 7:
             print("This feature is not available at the moment.\n Please choose another option.")
         input_menu = read_integer_between_numbers(menu, 1, 8)
-
 
 main()
