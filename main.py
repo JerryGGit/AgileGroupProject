@@ -34,7 +34,7 @@ def format_secs_to_minSecs(secs):
     secs = int(secs)
     minutes = secs // 60
     secs_remaining = secs % 60
-    formatted_time = f"{minutes} m, {secs_remaining} s"
+    formatted_time = f"{minutes} m {secs_remaining} s"
     return formatted_time
 
 
@@ -73,8 +73,7 @@ def runners_data():
 
 def race_results_data(chosen_race):
     race_data_dict = {}
-    with open(
-            f"{chosen_race}.txt") as file:  # Open the file for the race using the chosen_name variable as a name for the text file
+    with open(f"{chosen_race}.txt") as file:  # Open the file for the race using the chosen_name variable as a name for the text file
         results = file.readlines()
     for line in results:  # for loop to check if the line is empty space or not, then print the ones that aren't
         if line.isspace():
@@ -84,7 +83,7 @@ def race_results_data(chosen_race):
                 "\n")  # This line and next 2 lines just format the individual objects to have a nice formatted output
             runner = line.split(",")[0]
             time = line.split(",")[1]
-            race_data_dict[runner] = time
+            race_data_dict[runner] = int(time)
     return race_data_dict
 
 
@@ -170,6 +169,36 @@ def users_venue(races_location, runners_name, runners_id):
     connection.close()
 
 
+# This function is for option 5 to display all the times & positions for each race a given competitor ran in
+def show_competitor_time_and_pos():
+    runners_name, runners_ids = runners_data()
+    menu = ""
+    for i, name in enumerate(runners_name):
+        menu += f"\n{i+1}. {name}"
+    menu += "\n>>> "
+    input_menu = read_integer_between_numbers(menu, 1, len(runners_name))
+    chosen_runner = runners_ids[input_menu-1]
+    print(f"\n-- {runners_name[input_menu-1]} ({chosen_runner}) --\n")
+    races_locations = race_venues()
+    for race in races_locations:
+        try:
+            race_data_dict = race_results_data(race)
+            times_list = []
+            for time in race_data_dict.values():
+                if time != 0:
+                    times_list.append(time)
+            times_list.sort()
+            if chosen_runner in race_data_dict and int(race_data_dict[chosen_runner]) != 0:
+                race_position = times_list.index(race_data_dict[chosen_runner])+1
+                ordinality = ["st", "nd", "rd"]
+                if 1 <= race_position <= 3:
+                    print(f"{race} - {race_position}{ordinality[race_position-1]}, {format_secs_to_minSecs(race_data_dict[chosen_runner])}")
+                else:
+                    print(f"{race} - {race_position}th, {format_secs_to_minSecs(race_data_dict[chosen_runner])}")
+        except IOError:
+            pass
+
+
 # This function displays all runners who have won a race
 def show_all_winners(races, runners_name, runners_id):
     print("\n-- These are all the Runners who have won atleast 1 race! --")  # Title for the display
@@ -213,7 +242,7 @@ def main():
             displaying_winners_of_each_race(races_location)
             print("show all podium placers for a race.")
         elif input_menu == 5:
-            print("Show all the race times and finishing-positions for one competitor ")
+            show_competitor_time_and_pos()
         elif input_menu == 6:
             show_all_winners(races_location, runners_name, runners_id)
             print("Show all the race times and finishing-positions for one competitor ")
