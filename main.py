@@ -141,21 +141,18 @@ def reading_race_results(races_location):
 
 
 def winner_of_race(id, time_taken):
-    time_taken.sort()
+    time_quick = time_taken
+    #time_quick.sort()
     podium_time = []
     winner = []
     i = 0
     while i < 3:
-        podium_time.append(time_taken[i])
-
+        podium_time.append(format_secs_to_minSecs(time_quick[i]))
         i += 1
-    print(podium_time)
-    for i in range(len(id)):
-        for racer in podium_time:
-            if racer == time_taken[i]:
-                winner.append(id[i])
-    print(winner)
-    return winner
+    for i in id:
+        if time_quick == time_taken[i]:
+            print(id[i],time_quick[i])
+    return winner, podium_time
 
     # This function is for option 4: podium placers.
 
@@ -261,7 +258,7 @@ def main():
         elif input_menu == 3:
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
-            displaying_winners_of_each_race(races_location)
+            print("This feature is not available at the moment.\n Please choose another option.")
         elif input_menu == 5:
             show_competitor_time_and_pos()
         elif input_menu == 6:
