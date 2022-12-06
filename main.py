@@ -51,7 +51,7 @@ def race_venues():
         lines = input.readlines()
     races_location = []
     for line in lines:
-        #races_location.append(line.split(","))
+        # races_location.append(line.split(","))
         separator = ','
         races_location.append(line.split(separator, 1)[0])
     return races_location
@@ -123,24 +123,46 @@ def competitors_by_county(name, id):
             if id[i].startswith(counties[county]):
                 print(f"{name[i]} ({id[i]})")
 
-          #This function is for displaying_winners_of_each_race.
+        # This function is for displaying_winners_of_each_race.
+
 
 def reading_race_results(races_location):
     with open(f"{races_location}.txt") as input_type:
         lines = input_type.readlines()
     id = []
     time_taken = []
-    print(lines)
     for line in lines:
-        split_line = line.split(",".strip("\n"))
-        id.append(split_line[0])
-        time_taken.append(int(split_line[1].strip("\n")))
+        if not line.isspace():
+            split_line = line.split(",")
+            timeid = split_line[1].strip()
+            id.append(split_line[0])
+            time_taken.append(timeid)
     return id, time_taken
 
-        #This function is for option 4: podium placers.
+
+def winner_of_race(id, time_taken):
+    time_taken.sort()
+    podium_time = []
+    winner = []
+    i = 0
+    while i < 3:
+        podium_time.append(time_taken[i])
+
+        i += 1
+    print(podium_time)
+    for i in range(len(id)):
+        for racer in podium_time:
+            if racer == time_taken[i]:
+                winner.append(id[i])
+    print(winner)
+    return winner
+
+    # This function is for option 4: podium placers.
+
+
 def displaying_winners_of_each_race(races_location):
-    print("Venue             Looser")
-    print("="*24)
+    print("Venue             Winner")
+    print("=" * 24)
     for i in range(len(races_location)):
         id, time_taken = reading_race_results(races_location[i])
         fastest_runner = winner_of_race(id, time_taken)
@@ -240,7 +262,6 @@ def main():
             competitors_by_county(runners_name, runners_id)
         elif input_menu == 4:
             displaying_winners_of_each_race(races_location)
-            print("show all podium placers for a race.")
         elif input_menu == 5:
             show_competitor_time_and_pos()
         elif input_menu == 6:
@@ -248,5 +269,6 @@ def main():
         elif input_menu == 7:
             print("This feature is not available at the moment.\n Please choose another option.")
         input_menu = read_integer_between_numbers(menu, 1, 8)
+
 
 main()
